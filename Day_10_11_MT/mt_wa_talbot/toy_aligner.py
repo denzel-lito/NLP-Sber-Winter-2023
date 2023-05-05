@@ -40,7 +40,7 @@ def align_corpus(src_corpus, trg_corpus, counts):
 
 if __name__ == "__main__":
     if not len(sys.argv) == 3:
-        print "Usage: python toy_aligner.py src_corpus trg_corpus > wa_output."
+        print("Usage: python toy_aligner.py src_corpus trg_corpus > wa_output.")
         sys.exit(0)
     src_corpus = read_all_tokens(sys.argv[1])
     trg_corpus = read_all_tokens(sys.argv[2])
@@ -48,4 +48,4 @@ if __name__ == "__main__":
     counts = count_word_cooccurrences(src_corpus, trg_corpus)
     alignments = align_corpus(src_corpus, trg_corpus, counts)
     for alignment in alignments:
-        print " ".join(["%d-%d-*" % (src, trg) for src, trg in alignment.items()])
+        print(" ".join(["%d-%d-*" % (src, trg) for src, trg in alignment.items()]))

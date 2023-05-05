@@ -6,7 +6,7 @@ def output_alignments_per_test_set(alignments, output_prefix, test_sets={"blinds
     "Outputs word alignments for test sets: this assumes corpus was from start of .all file"
     for test, (start, end) in test_sets.items():
         if len(alignments) < end:
-            print "skipping test set %s." % test
+            print("skipping test set %s." % test)
             continue
         output = open(output_prefix + "." + test + ".wa", "w")
         for alignment in alignments[start:end]:

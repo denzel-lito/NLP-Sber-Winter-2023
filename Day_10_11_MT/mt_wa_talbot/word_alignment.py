@@ -47,7 +47,7 @@ def estimate_models(src_corpus, trg_corpus, prior_model, translation_model, num_
             src_corpus, trg_corpus, prior_model, translation_model)
         reestimate_models(prior_model, translation_model)
         if iteration > 0:
-            print "corpus log likelihood: %1.3f" % corpus_log_likelihood
+            print("corpus log likelihood: %1.3f" % corpus_log_likelihood)
     return prior_model, translation_model
 
 def align_sentence_pair(src_tokens, trg_tokens, prior_probs, translation_probs):
@@ -80,7 +80,7 @@ def align_corpus(src_corpus, trg_corpus, num_iterations):
 
 if __name__ == "__main__":
     if not len(sys.argv) == 5:
-        print "Usage: python word_alignment.py src_corpus trg_corpus iterations output_prefix."
+        print("Usage: python word_alignment.py src_corpus trg_corpus iterations output_prefix.")
         sys.exit(0)
     src_corpus = utils.read_all_tokens(sys.argv[1])
     trg_corpus = utils.read_all_tokens(sys.argv[2])
