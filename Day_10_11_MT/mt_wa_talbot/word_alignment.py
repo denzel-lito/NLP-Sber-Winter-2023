@@ -7,9 +7,13 @@ from models import TranslationModel
 def get_posterior_distribution_for_trg_token(trg_index, src_tokens, trg_tokens,
                                              prior_model, translation_model):
     "Compute the posterior distribution over alignments for trg_index: P(a_j = i|f_j, e)."
-    assert False, "Implement this."
-    # marginal_prob = p(f_j|e)
-    # posterior_probs[i] = p(a_j = i|f_j, e)
+    # marginal_prob = p(f_j|e) = sum over i p(a_j = i, f_j|e)
+    i_probs = [prior_model.get_prior_prob(src_index, trg_index, len(src_tokens), len(trg_tokens))* #<---
+              translation_model.get_conditional_prob(src_token, trg_tokens[trg_index])             #<---
+              for src_index, src_token in enumerate(src_tokens)]                                   #<---
+    marginal_prob = sum(i_probs)                                                                   #<---
+    # posterior_probs[i] = p(a_j = i|f_j, e) = p(a_j = i, f_j|e) / p(f_j|e)
+    posterior_probs = [i_prob / marginal_prob for i_prob in i_probs]                               #<---
     return marginal_prob, posterior_probs
 
 def get_posterior_alignment_matrix(src_tokens, trg_tokens, prior_model, translation_model):
@@ -18,16 +22,25 @@ def get_posterior_alignment_matrix(src_tokens, trg_tokens, prior_model, translat
     # 2. Translation model assume each target word is generated independently given its alignment.
     posterior_matrix = []
     sentence_marginal_log_likelihood = 0.0
-    assert False, "Implement this."
+    for trg_index, _ in enumerate(trg_tokens):                                                      #<---
+        marginal_prob, posterior_probs = get_posterior_distribution_for_trg_token(                  #<---
+                                 trg_index, src_tokens, trg_tokens, prior_model, translation_model) #<---
+        posterior_matrix.append(posterior_probs)                                                    #<---
+        sentence_marginal_log_likelihood += marginal_prob                                           #<---
     return sentence_marginal_log_likelihood, posterior_matrix
 
 def collect_expected_statistics(src_corpus, trg_corpus, prior_model, translation_model):
     "Infer posterior distribution over each sentence pair and collect statistics: E-step"
     corpus_marginal_log_likelihood = 0.0
-    assert False, "Implement this."
-    # 1. Infer posterior
-    # 2. Collect statistics in each model.
-    # 3. Update log prob
+    for i in range(len(src_corpus)):
+        # 1. Infer posterior
+        sentence_marginal_log_likelihood, posterior_matrix = get_posterior_alignment_matrix(        #<---
+                                       src_corpus[i], trg_corpus[i], prior_model, translation_model)#<---
+        # 2. Collect statistics in each model.
+        translation_model.collect_statistics(src_corpus[i], trg_corpus[i], posterior_matrix)        #<---
+        prior_model.collect_statistics(len(src_corpus[i]), len(trg_corpus[i]), posterior_matrix)    #<---
+        # 3. Update log prob
+        corpus_marginal_log_likelihood += sentence_marginal_log_likelihood                          #<---
     return corpus_marginal_log_likelihood
 
 def reestimate_models(prior_model, translation_model):

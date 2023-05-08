@@ -57,12 +57,12 @@ class CorpusBrowser:
         return ''
 
     def RefreshDisplay(self):
-        print '\n' * 100
+        print('\n' * 100)
         src_end = min([self.src_index_ + self.window_, len(self.src_corpus_[self.sent_index_])])
         src_tokens = self.src_corpus_[self.sent_index_][self.src_index_:src_end]
         src_line = ''.join([self.Truncate(src_tok) + '|' for src_tok in [''] + src_tokens])
-        print src_line
-        print '-' * len(src_line)
+        print(src_line)
+        print('-' * len(src_line))
         trg_end = min([self.trg_index_ + self.window_, len(self.trg_corpus_[self.sent_index_])])
         trg_tokens = self.trg_corpus_[self.sent_index_][self.trg_index_:trg_end]
         for j, trg_index in enumerate(range(self.trg_index_, trg_end)):
@@ -70,18 +70,18 @@ class CorpusBrowser:
             for src_index in range(self.src_index_, src_end):
                 kind = self.GetAlignment(src_index, trg_index)
                 line += kind + ' ' * (self.token_size_ - len(kind)) + '|'
-            print line
-            print '-' * len(line)
-        print
-        print ' '.join(self.src_corpus_[self.sent_index_])
-        print ' '.join(self.trg_corpus_[self.sent_index_])
-        print
-        print 'n next sentence; p previous sentence'
-        print '> scroll source right; < scroll source left'
-        print 'k scroll target right; m scroll target left'
-        print 'W increase window; w decrease window'
-        print 'T increase token size; t decrease token size'
-        print 'q quit'
+            print(line)
+            print('-' * len(line))
+        print()
+        print(' '.join(self.src_corpus_[self.sent_index_]))
+        print(' '.join(self.trg_corpus_[self.sent_index_]))
+        print()
+        print('n next sentence; p previous sentence')
+        print('> scroll source right; < scroll source left')
+        print('k scroll target right; m scroll target left')
+        print('W increase window; w decrease window')
+        print('T increase token size; t decrease token size')
+        print('q quit')
 
     def HandleInput(self, input):
         if input in 'qQ':
@@ -120,8 +120,8 @@ class CorpusBrowser:
 
 if __name__ == "__main__":
     if not len(sys.argv) == 4:
-        print "Usage: python corpus_browser.py src_corpus trg_corpus word_alignments"
+        print("Usage: python corpus_reader.py src_corpus trg_corpus word_alignments")
         sys.exit(0)
     browser = CorpusBrowser(sys.argv[1], sys.argv[2], sys.argv[3])
-    while browser.HandleInput(raw_input()):
+    while browser.HandleInput(input()):
         browser.RefreshDisplay()

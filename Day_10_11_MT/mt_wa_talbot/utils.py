@@ -1,8 +1,9 @@
 import codecs
 
-def output_alignments_per_test_set(alignments, output_prefix, test_sets={"blinds" : (0, 171),
-                                                                         "dev" : (171, 341),
-                                                                         "test" : (341, 511)}):
+def output_alignments_per_test_set(alignments, output_prefix, test_sets={"blinds" : (0, 171), 
+                                                                         "dev" : (171, 341), 
+                                                                         "test" : (341, 511)}): 
+                                                                         #"all" : (0, 10000)
     "Outputs word alignments for test sets: this assumes corpus was from start of .all file"
     for test, (start, end) in test_sets.items():
         if len(alignments) < end:
